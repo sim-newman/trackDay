@@ -25,6 +25,9 @@ excel_df.loc[excel_df['Lineitem name'].str.contains('Fast'), 'Lineitem name'] = 
 excel_df.loc[excel_df['Lineitem name'].str.contains('Intermediate'), 'Lineitem name'] = 'Itermidiate'
 excel_df.loc[excel_df['Lineitem name'].str.contains('Novice'), 'Lineitem name'] = 'Novice'
 
+# sort by group
+excel_df = excel_df.sort_values(by='Lineitem name', ascending=False)
+
 
 # Select specific columns by name
 selected_columns = excel_df[['Lineitem name','Name', 'Billing Name','Email', 'Phone']]
@@ -34,6 +37,15 @@ print(selected_columns)
 
 # Read the input file
 excel_filtered_df = pd.read_excel(iExcel_loc, usecols=selected_columns)
+
+# Modify values in the DataFrame
+# excel_df.loc[excel_df['Lineitem name'] == 'sim.newman@me.com', 'Lineitem name'] = 'sim.newman@me.com.replaced'
+excel_filtered_df.loc[excel_filtered_df['Lineitem name'].str.contains('Fast'), 'Lineitem name'] = 'Fast'
+excel_filtered_df.loc[excel_filtered_df['Lineitem name'].str.contains('Intermediate'), 'Lineitem name'] = 'Itermidiate'
+excel_filtered_df.loc[excel_filtered_df['Lineitem name'].str.contains('Novice'), 'Lineitem name'] = 'Novice'
+
+# sort by group
+excel_filtered_df = excel_filtered_df.sort_values(by='Lineitem name', ascending=False)
 
 # Write the output file
 excel_filtered_df.to_excel(oExcel_loc, index=False)
