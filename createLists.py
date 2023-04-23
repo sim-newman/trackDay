@@ -13,27 +13,10 @@ iExcel_loc = '/Users/simonnewman/Dropbox/documents/pb/trackdays.xlsx'
 oExcel_loc = '/Users/simonnewman/Dropbox/documents/pb/output/trackdays_output_'+ date_string +'.xlsx'
 
 print(sc.red('Starting: Read excel file ' + iExcel_loc))  
-# Load the Excel file
-# excel_df = pd.read_excel(iExcel_loc)
 
-# Modify values in the DataFrame
-#excel_df.loc[excel_df['Lineitem name'].str.contains('Fast'), 'Lineitem name'] = 'Fast'
-#excel_df.loc[excel_df['Lineitem name'].str.contains('Intermediate'), 'Lineitem name'] = 'Itermidiate'
-#excel_df.loc[excel_df['Lineitem name'].str.contains('Novice'), 'Lineitem name'] = 'Novice'
-
-# sort by group
-#excel_df = excel_df.sort_values(by='Lineitem name', ascending=False)
-
-# rename tjhe lineitem to Group
-#excel_df = excel_df.rename(columns={'Lineitem name': 'Group'})
-
-# Select specific columns by name
-# selected_columns = excel_df[['Lineitem name','Name', 'Billing Name','Email', 'Phone']]
+# pick columns to be in report.
 selected_columns = ['Lineitem name','Name', 'Billing Name','Email', 'Phone']
 
-
-# Output the selected columns
-#print(selected_columns)
 
 # Read the input file
 excel_filtered_df = pd.read_excel(iExcel_loc, usecols=selected_columns)
@@ -50,6 +33,7 @@ excel_filtered_df = excel_filtered_df.sort_values(by=['Date of TD', 'Group'], as
 excel_filtered_df = excel_filtered_df.rename(columns={'Name': 'Ref'})
 excel_filtered_df = excel_filtered_df.rename(columns={'Billing Name': 'Name'})
 
+#print out the report
 print (excel_filtered_df)
 
 # Write the output file
