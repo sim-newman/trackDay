@@ -9,43 +9,53 @@ now = dt.datetime.now()
 date_string = now.strftime("%Y-%m-%d_%H%M%S") 
 print (date_string)
 
-iExcel_loc = '/Users/simonnewman/Dropbox/documents/pb/trackdays.xlsx'
+#iExcel_loc = '/Users/simonnewman/Dropbox/documents/pb/trackdaysfull.xlsx'
+#iExcel_loc = '/Users/simonnewman/Dropbox/documents/pb/orders_export_1.xlsx'
+iExcel_loc = '/Users/simonnewman/Dropbox/documents/pb/bookings2.xlsx'
+
 oExcel_loc = '/Users/simonnewman/Dropbox/documents/pb/output/trackdays_output_'+ date_string +'.xlsx'
 
 print(sc.red('Starting: Read excel file ' + iExcel_loc))  
 
 # pick columns to be in report.
-selected_columns = ['Lineitem name','Name', 'Billing Name','Email']
+sColumns = ['Lineitem name','Created at','Name', 'Billing Name','Email','Billing Phone', 'Notes']
 
 
 # Read the input file into a dataframe
-excel_filtered_df = pd.read_excel(iExcel_loc, usecols=selected_columns)
+filtered_df = pd.read_excel(iExcel_loc, usecols=sColumns)
 
-# fill missing values with empty strings
-excel_filtered_df['Lineitem name'].fillna('', inplace=True)
-excel_filtered_df[['Date of TD', 'Group']] = excel_filtered_df['Lineitem name'].str.split('-', n=1, expand=True)
+# Split lineitem into Date and Group
+filtered_df['Lineitem name'].fillna('', inplace=True)
+filtered_df[['Day', 'Group']] = filtered_df['Lineitem name'].str.split('-', n=1, expand=True)
 
+# get year portion from the created at.
+filtered_df['Created at'].fillna('', inplace=True)
+filtered_df[['Year', 'month']] = filtered_df['Created at'].str.split('-', n=1, expand=True)
 
 # sort by group
-excel_filtered_df = excel_filtered_df.sort_values(by=['Date of TD', 'Group'], ascending=True)
+sorted_df = filtered_df.sort_values(by=['Year','Day', 'Group', 'Name'], ascending=True)
 
 # Rename columns
-excel_filtered_df = excel_filtered_df.rename(columns={'Name': 'Ref'})
-excel_filtered_df = excel_filtered_df.rename(columns={'Billing Name': 'Name'})
+sorted_df = sorted_df.rename(columns={'Name': 'Ref'})
+sorted_df = sorted_df.rename(columns={'Billing Name': 'Name'})
+sorted_df = sorted_df.rename(columns={'Billing Phone': 'Phone'})
+
 
 # Define the new order of columns
 #new_order = ['Date of TD', 'Group', 'Ref', 'Name', 'Email', 'Lineitem name']
-new_order = ['Date of TD', 'Group', 'Ref', 'Name', 'Email']
+new_order = ['Year','Day','Group', 'Ref', 'Name', 'Email', 'Phone','Notes']
 
 
 # Rearrange the columns in the DataFrame
-excel_filtered_df = excel_filtered_df[new_order]
+sorted_df = sorted_df[new_order]
+
+
 
 #print out the report
-print (excel_filtered_df)
+print (sorted_df)
 
 # Write the output file
-excel_filtered_df.to_excel(oExcel_loc, index=False)
+sorted_df.to_excel(oExcel_loc, index=False)
 
 print(sc.red('Finished: Results written to ' + oExcel_loc  ))  
 
