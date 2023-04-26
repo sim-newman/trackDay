@@ -2,17 +2,15 @@ import datetime as dt
 import pandas as pd
 import simple_colors as sc
 
+
 # create a datetime object for the current date and time
 now = dt.datetime.now() 
 
 # convert the datetime object to a string
 date_string = now.strftime("%Y-%m-%d_%H%M%S") 
-print (date_string)
 
-#iExcel_loc = '/Users/simonnewman/Dropbox/documents/pb/trackdaysfull.xlsx'
-#iExcel_loc = '/Users/simonnewman/Dropbox/documents/pb/orders_export_1.xlsx'
+# file locations for input/output excels
 iExcel_loc = '/Users/simonnewman/Dropbox/documents/pb/bookings2.xlsx'
-
 oExcel_loc = '/Users/simonnewman/Dropbox/documents/pb/output/trackdays_output_'+ date_string +'.xlsx'
 
 print(sc.red('Starting: Read excel file ' + iExcel_loc))  
@@ -49,13 +47,26 @@ new_order = ['Year','Day','Group', 'Ref', 'Name', 'Email', 'Phone','Notes']
 # Rearrange the columns in the DataFrame
 sorted_df = sorted_df[new_order]
 
+#create hashmap to store name and email 
+hashmap = {}
 
+# get the names and correspinding email address. 
+for index, row in sorted_df.iterrows():
+    # add the fruit and color to the hashmap
+    hashmap[row['Email']] = row['Name']
 
-#print out the report
-print (sorted_df)
+# check from blank names and popuate from the hasmap
+if sorted_df['Name'].isna().any():
+    email = 'sim.newman@me.com'
+    a = sorted_df['Email']
+    
+    sorted_df.loc[sorted_df['Name'].isnull(), 'Name'] = hashmap[a.abs]
 
 # Write the output file
-sorted_df.to_excel(oExcel_loc, index=False)
+sorted_df.to_excel(oExcel_loc, index=False) 
+
+# pear_value = my_dict.get('pear', 0)
+
 
 print(sc.red('Finished: Results written to ' + oExcel_loc  ))  
 
