@@ -16,7 +16,7 @@ oExcel_loc = '/Users/simonnewman/Dropbox/documents/pb/output/trackdays_output_'+
 print(sc.red('Starting: Read excel file ' + iExcel_loc))  
 
 # pick columns to be in report.
-sColumns = ['Lineitem name','Created at','Name', 'Billing Name','Email','Billing Phone', 'Notes']
+sColumns = ['Lineitem name','Created at','Name', 'Billing Name','Email','Notes']
 
 
 # Read the input file into a dataframe
@@ -36,11 +36,10 @@ sorted_df = filtered_df.sort_values(by=['Year','Day', 'Group', 'Name'], ascendin
 # Rename columns
 sorted_df = sorted_df.rename(columns={'Name': 'Ref'})
 sorted_df = sorted_df.rename(columns={'Billing Name': 'Name'})
-sorted_df = sorted_df.rename(columns={'Billing Phone': 'Phone'})
 
 
 # Define the new order of columns
-new_order = ['Year','Day','Group', 'Ref', 'Name', 'Email', 'Phone','Notes']
+new_order = ['Year','Day','Group', 'Ref', 'Name', 'Email', 'Notes']
 
 
 # Rearrange the columns in the DataFrame
@@ -64,7 +63,6 @@ for index, row in sorted_df.iterrows():
           row['Name'] = str(hashmap[email[0]])
         except KeyError:
             print('Something went wrong! for email address lookup')
-
 
 # Write the output file
 sorted_df.to_excel(oExcel_loc, index=False) 
