@@ -40,33 +40,34 @@ sorted_df = sorted_df.rename(columns={'Billing Phone': 'Phone'})
 
 
 # Define the new order of columns
-#new_order = ['Date of TD', 'Group', 'Ref', 'Name', 'Email', 'Lineitem name']
 new_order = ['Year','Day','Group', 'Ref', 'Name', 'Email', 'Phone','Notes']
 
 
 # Rearrange the columns in the DataFrame
 sorted_df = sorted_df[new_order]
 
-#create hashmap to store name and email 
+# store non null names and emails into a hashmp.  
 hashmap = {}
-
-# get the names and correspinding email address. 
 for index, row in sorted_df.iterrows():
-    # add the fruit and color to the hashmap
-    hashmap[row['Email']] = row['Name']
+    if str(row['Name']) != 'nan':
+        hashmap[row['Email']] = row['Name']
+    
+# The booking system does not store names against all purchases when a person makes muliple purchases on the same order.
+# The following looks for entries with no names, and then populates that with the name from the orther orders.
+for index, row in sorted_df.iterrows():
+    name_str = str(row['Name'])
+    email  = tuple([row['Email']])
+    
+    if name_str == 'nan':
+        try:
+          print(sc.blue('We do not have a name for ' + str(row['Email']) + ' we need to auto populate with ' + str(hashmap[email[0]])))
+          row['Name'] = str(hashmap[email[0]])
+        except KeyError:
+            print('Something went wrong! for email address lookup')
 
-# check from blank names and popuate from the hasmap
-if sorted_df['Name'].isna().any():
-    email = 'sim.newman@me.com'
-    a = sorted_df['Email']
-    print ('Email =' +  a)
-    sorted_df.loc[sorted_df['Name'].isnull(), 'Name'] = 'BOB'
 
 # Write the output file
 sorted_df.to_excel(oExcel_loc, index=False) 
-
-# pear_value = my_dict.get('pear', 0)
-
 
 print(sc.red('Finished: Results written to ' + oExcel_loc  ))  
 
