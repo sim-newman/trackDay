@@ -59,8 +59,8 @@ for index, row in sorted_df.iterrows():
 if sorted_df['Name'].isna().any():
     email = 'sim.newman@me.com'
     a = sorted_df['Email']
-    
-    sorted_df.loc[sorted_df['Name'].isnull(), 'Name'] = hashmap[a.abs]
+    print ('Email =' +  a)
+    sorted_df.loc[sorted_df['Name'].isnull(), 'Name'] = 'BOB'
 
 # Write the output file
 sorted_df.to_excel(oExcel_loc, index=False) 
