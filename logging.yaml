@@ -1,0 +1,19 @@
+version: 1
+formatters:
+  simpleFormatter:
+    format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+    datefmt: "%Y-%m-%d %H:%M:%S"
+handlers:
+  consoleHandler:
+    class: logging.StreamHandler
+    level: INFO
+    formatter: simpleFormatter
+    stream: ext://sys.stdout
+loggers:
+  my_module:
+    level: INFO
+    handlers: [consoleHandler]
+    propagate: no
+root:
+  level: INFO
+  handlers: [consoleHandler]
