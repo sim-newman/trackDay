@@ -1,0 +1,5 @@
+excel:
+  input_location: /Users/simonnewman/Dropbox/documents/pb/
+  input_filename: bookings2.xlsx
+  output_location: /Users/simonnewman/Dropbox/documents/pb/output/
+  output_filename: trackdays_output_{timestamp}.xlsx
